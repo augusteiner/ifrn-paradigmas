@@ -18,35 +18,36 @@ class MeuListener extends CalculadoraBaseListener implements ParseTreeListener {
         values = new ParseTreeProperty<Integer>();
     }
 
-    int getPrograma() {
+    int getResultado() {
         return resultado;
     }
 
-    @Override public void exitInteiro(CalculadoraParser.InteiroContext ctx) {
+    @Override
+    public void exitInteiro(CalculadoraParser.InteiroContext ctx) {
         System.out.println(ctx.INT().getText());
 
-        values.put(ctx.INT(), Integer.parseInt(ctx.INT().getText()));
+        values.put(ctx, Integer.parseInt(ctx.INT().getText()));
     }
 
-    @Override public void exitOpBin(CalculadoraParser.OpBinContext ctx) {
-        // if (ctx.children.size() != 3)
-        //     return;
+    @Override
+    public void exitOpBin(CalculadoraParser.OpBinContext ctx) {
+        if (ctx.children.size() != 3)
+            return;
 
-        // String operacao = ctx.children.get(1).getText();
+        String operacao = ctx.children.get(1).getText();
 
-        // System.out.println(ctx.children);
-        // System.out.println(ctx.children.size());
+        Integer lhs = values.get(ctx.children.get(0));
+        Integer rhs = values.get(ctx.children.get(2));
 
-        // int lhs = values.get(ctx.expressao(0));
-        // int rhs = values.get(ctx.expressao(1));
+        if (operacao.equals("+")) {
+            resultado = lhs + rhs;
+        } else if (operacao.equals("*")) {
+            resultado = lhs * rhs;
+        } else {
+            //
+        }
 
-        // if (operacao.equals("+")) {
-        //     resultado += lhs + rhs;
-        // } else if (operacao.equals("*")) {
-        //     resultado += lhs * rhs;
-        // } else {
-        //     //
-        // }
+        values.put(ctx, resultado);
     }
 
 }
